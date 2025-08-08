@@ -14,11 +14,29 @@ def SubmitToDB(temp:int, hum:int, loc:str, time:str):
     #print(myDB)
 
     mycursor = myDB.cursor()
+    try:
+        tempCast = int(temp)
+        humCast = int(hum)
+    except ValueError:
+        print("Couldn't cast to int")
+        return
 
     sql = "INSERT INTO sensorsdata (temp, hum, loc, time) VALUES (%s, %s, %s, %s)"
     val = (int(temp), int(hum), loc, time)
-    mycursor.execute(sql, val)
-
-    myDB.commit()
-
+    
+        
+    try:
+        mycursor.execute(sql, val)
+        myDB.commit()
+    except BaseException as e:
+        print("Error writing to DB: ", e)
+        print("DATA:", temp, hum, loc, time)
+        print (type(temp))
+        print(type(hum))
+        print(type(loc))
+        print(type(time))
+        print("not a valid datapoint, omitting")
+        return
+    finally:
+        mycursor.close()
     print(mycursor.rowcount, "record inserted")
