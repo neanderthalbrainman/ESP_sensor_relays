@@ -2,7 +2,7 @@
 import time
 from pyrf24 import RF24, RF24_PA_LOW, RF24_1MBPS
 from datetime import datetime
-import nrf_db_write
+import db_connector
 
 CE_PIN    = 25        # BCM GPIO25 for CE
 CS_DEVICE = 0         # SPI device 0 → /dev/spidev0.0
@@ -58,7 +58,7 @@ def ParseTextAndSendToDB(text):
     location = working[4]
     time = datetime.now()
     #print(temperature, humidity, location, time)
-    nrf_db_write.SubmitToDB(temperature, humidity, location, time)
+    db_connector.SubmitToDB(temperature, humidity, location, time)
 
 def main():
     radio = setup_radio()
